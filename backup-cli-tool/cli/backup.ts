@@ -1,8 +1,10 @@
+import 'dotenv/config';
 import { PostgresAdapter } from "../adapters/PostgresAdapter/PostgresAdapter"
 import { BackupManager } from "../core/BackupManager";
 import { LocalStorage } from "../storage/LocalStorage";
 
 export const backup = async () => {
+
     const adapter = new PostgresAdapter(process.env);
     const storage = new LocalStorage();
 

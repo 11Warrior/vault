@@ -8,8 +8,9 @@ export class PostgresAdapter implements Adapter {
     testConnection(): Promise<void> {
         return new Promise((resolve, reject) => {
             const psql_child = spawn('psql', [
-                '-h', this.config.DB_HOST,
+                // '-h', this.config.DB_HOST,
                 '-U', this.config.DB_USER,
+                // '-p', this.config.DB_PORT,
                 '-d', this.config.DB_NAME,
                 '-c', "\\q"
 

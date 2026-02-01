@@ -1,3 +1,3 @@
-import { spawn } from "child_process";
+// import { spawn } from "child_process";
 
-console.log(typeof (spawn('').stdout));
+// console.log(typeof (spawn('').stdout));
