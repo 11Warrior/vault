@@ -8,36 +8,101 @@ export class MongoDBAdapter implements Adapter {
 
     async testConnection(): Promise<void> {
         // TODO: Implement actual MongoDB connection test
-        throw new Error("testConnection not implemented");
+        return new Promise((resolve, reject) => {
+            let args: string[] = []
+            let env = { ...process.env }
+
+            if (this.config.DB_URL) {
+                args = [
+                    '--uri', this.config.DB_URL,
+                    // "--dryRun",
+                    "--tlsInsecure"
+                ]
+            } else {
+                args = [
+                    "--host", this.config.DB_HOST,
+                    "--username", this.config.DB_USER,
+                    "--password", this.config.DB_PASS,
+                    '--dryRun',
+                    '--tlsInsecure'
+                ]
+            }
+
+            const test_mongo_conn = spawn('mongodump', args, { env });
+
+            test_mongo_conn.on('exit', (code) => {
+                if (code === 0) {
+                    resolve();
+                } else {
+                    reject(new Error("Error while connecting to mongodb database"))
+                }
+            })
+        })
     }
 
     backup(): Readable {
-        const args = []
+        let args = []
         //TODO: Backup method
         if (this.config.DB_URL) {
-            const mongo_backup = spawn('mongodump',
-                [
-                    "--uri=", this.config.DB_URL
-                ]
-            )
-
-            return mongo_backup.stdout;
+            args = [
+                '--uri', this.config.DB_URL,
+                "--archive"
+            ]
+        } else {
+            args = [
+                "--host", this.config.DB_HOST,
+                "--username", this.config.DB_USER,
+                "--password", this.config.DB_PASS,
+                "--archive"
+            ]
         }
 
-        const mongo_backup = spawn('mongodump', [
-            "--host=", this.config.DB_HOST,
-            "--username=", this.config.DB_USER,
-            "--password=", this.config.DB_PASS
-        ])
+        const mongo_backup = spawn('mongodump', args)
 
         return mongo_backup.stdout;
-
     }
 
     restore(file: Readable): Promise<void> {
         //TODO: restore method
-        return new Promise((resolve, reject) => {
+        let args: string[] = []
+        const env = { ...process.env }
 
+        if (this.config.DB_URL) {
+            args = [
+                '--uri', this.config.DB_URL,
+                '--drop',
+                "--archive"
+            ]
+        } else {
+            args = [
+                '--host', this.config.DB_HOST,
+                '--username', this.config.DB_USER
+            ]
+        }
+
+        const restore_data = spawn('mongorestore', args, { env })
+
+        // restore_data.stderr.on('data', (data) => {
+        //     console.log("Error getting the stream in mongodb restore method", data.toString());
+        // })
+
+        file.pipe(restore_data.stdin).on('error', () => {
+            console.log("Error while piping the restored file ", );
         });
+
+        return new Promise((resolve, reject) => {
+            restore_data.on('exit', (code) => {
+                if (code === 0) {
+                    resolve();
+                } else {
+                    reject(new Error("Error restoring the data of mongodb."));
+                }
+            })
+        })
+
+
+        // return new Promise((resolve, reject) => {    
+        // })
+
     }
 }

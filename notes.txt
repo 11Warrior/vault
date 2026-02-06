@@ -1,0 +1,11 @@
+needed tools :
+    psql
+    postgresql : 17 
+    mongodb-tools(mongodump, mongorestore)
+    mongosh
+
+-later need to containerize this inside a single container which can support all of the used tools
+
+
+
+-release as a package
