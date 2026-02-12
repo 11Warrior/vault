@@ -19,6 +19,6 @@ export class LocalStorage {
     load(filename: string): Stream {
         const fileDir = path.join('backup', this.type, filename)
         if (!fileDir) throw new Error("Backup folder/file is empty")
-        return fs.createReadStream(fileDir);
+        return createReadStream(fileDir);
     }
 }

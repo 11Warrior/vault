@@ -1,6 +1,7 @@
-import { Readable } from "node:stream";
+
+import { Readable } from "stream";
 import { Adapter } from "../Adapters";
-import { spawn } from "node:child_process";
+import { spawn } from "child_process";
 
 
 export class MongoDBAdapter implements Adapter {
