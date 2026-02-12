@@ -6,7 +6,7 @@ A robust command-line utility for automating and managing file and directory bac
 
 ## Introduction
 
-`backup-cli-tool` offers a simple yet powerful way to create and manage backups from the terminal. It supports customizable backup strategies, incremental and full backups, and multiple storage backends. The tool empowers users to automate protection of important files, ensuring data safety and disaster recovery. You can integrate it into existing workflows, scripts, and schedulers so that backups run consistently without manual supervision.
+`savr` offers a simple yet powerful way to create and manage backups from the terminal. It supports customizable backup strategies, incremental and full backups, and multiple storage backends. The tool empowers users to automate protection of important files, ensuring data safety and disaster recovery. You can integrate it into existing workflows, scripts, and schedulers so that backups run consistently without manual supervision.
 
 ---
 
@@ -30,7 +30,7 @@ A robust command-line utility for automating and managing file and directory bac
 
 ## Installation
 
-Install `backup-cli-tool` using one of the following methods. Choose the global npm installation if you want the command available system‑wide. Use the source installation when you need to inspect, modify, or contribute to the codebase. Both approaches rely on Node.js and npm, so ensure they are installed before proceeding.
+Install `savr-cli` using one of the following methods. Choose the global npm installation if you want the command available system‑wide. Use the source installation when you need to inspect, modify, or contribute to the codebase. Both approaches rely on Node.js and npm, so ensure they are installed before proceeding.
 
 ### Using npm
 
@@ -45,8 +45,8 @@ This command installs the package globally, making the `savr` command available 
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/11Warrior/backup-cli-tool.git
-cd backup-cli-tool
+git clone https://github.com/11Warrior/savr.git
+cd savr
 npm install
 npm run build
 ```
@@ -56,7 +56,7 @@ Cloning from source gives you full access to the implementation and build script
 You can then run the CLI via:
 
 ```bash
-node dist/index.js
+node dist/cli/cli.run.js
 ```
 
 Running the compiled entry point with Node.js allows you to test the tool directly from the repository. You can create a shell alias or script wrapping this command if you prefer a shorter invocation. This approach is also useful in containerized or isolated environments where global npm installations are not desirable.
@@ -67,7 +67,7 @@ Running the compiled entry point with Node.js allows you to test the tool direct
 
 - **Node.js v14 or higher**: The tool relies on modern JavaScript features and Node.js APIs introduced in recent versions. Running on Node.js v14 or higher ensures compatibility with asynchronous filesystem operations and stable language constructs. Using older Node.js versions can lead to runtime errors or missing features, so upgrading is strongly recommended.
 
-- **npm package manager**: npm handles installation of `backup-cli-tool` and its dependencies. It resolves version constraints, downloads packages, and manages the global or local installation location. Other package managers like Yarn or pnpm may work, but npm remains the primary tested option.
+- **npm package manager**: npm handles installation of `savr-cli` and its dependencies. It resolves version constraints, downloads packages, and manages the global or local installation location. Other package managers like Yarn or pnpm may work, but npm remains the primary tested option.
 
 - **Access to desired backup storage destinations**: The tool needs permission to read source paths and write backups to the destination. For local or network storage, ensure the user running the command has filesystem permissions. For remote or mounted locations, verify that authentication, mounting, and connectivity are correctly configured before scheduling automated backups.
 
@@ -75,7 +75,7 @@ Running the compiled entry point with Node.js allows you to test the tool direct
 
 ## Usage
 
-`backup-cli-tool` uses a command-line interface with various options and commands. Each subcommand focuses on a specific lifecycle action, such as creating, listing, or restoring backups. Options let you point to configuration files, tweak behavior, and control logging without changing code. You can combine options to create powerful scripts tailored to your environment.
+`savr-cli` uses a command-line interface with various options and commands. Each subcommand focuses on a specific lifecycle action, such as creating, listing, or restoring backups. Options let you point to configuration files, tweak behavior, and control logging without changing code. You can combine options to create powerful scripts tailored to your environment.
 
 ### Savr Backup Commands
 
@@ -92,43 +92,28 @@ savr backup <filename>
 ### Basic Backup
 
 ```bash
-backup-cli-tool backup --config ./backup-config.json
+savr backup <dbtype>
 ```
 
-This command reads settings from `backup-config.json` and creates a backup according to the defined rules. It selects source paths, applies exclusion patterns, and writes the resulting archive to the configured destination. If retention policies are enabled, the same run can also prune old backups after the new archive is created.
+This command creates a backup according to the defined database type(postgres, mongodb). It selects source paths, applies exclusion patterns, and writes the resulting archive to the configured destination. If retention policies are enabled, the same run can also prune old backups after the new archive is created.
 
 ### Restore Files
 
 ```bash
-backup-cli-tool restore --backup backup-2023-07-14.zip --destination ./restore-folder
+savr restore <filename>
 ```
 
-The restore command takes an existing backup archive and extracts its contents to the specified destination. You can point to any compatible backup file created by the tool, whether stored locally or downloaded from remote storage. Restores can overwrite existing files in the destination, so consider using a separate folder when testing recovery scenarios.
+The restore command takes an existing backup archive and extracts its contents to the database either deployed on cloud or locally hosted. You can point to any compatible backup file created by the tool, whether stored locally or downloaded from remote storage. Restores can overwrite existing files in the destination, so consider using a separate folder when testing recovery scenarios.
 
 ### List Available Backups
-
-```bash
-backup-cli-tool list --config ./backup-config.json
-```
-
-Listing uses your configuration to locate the backup destination and then enumerates all recognized backup archives. The command may display information like filenames, creation timestamps, and sizes, depending on implementation details. This overview helps you verify that scheduled backups are running and that retention rules behave as expected.
-
-### Dry Run
-
-Simulate a backup without making changes:
-
-```bash
-backup-cli-tool backup --config ./backup-config.json --dry-run
-```
-
-In dry run mode, the tool goes through the same selection and planning stages as a real backup. It reports which files would be included and excluded but skips creating or modifying backup archives. Use this mode to validate new configurations, especially complex exclusion patterns or new destinations, before trusting them with production data.
+You can view your backed up files from /backup folder under the folder /postgres for postgres database and /mongodb for mongodb database. The destination is /backup/postgres and /backup/monogodb. Your backup files are there. 
 
 ### Help
 
 Get a full list of available commands and options:
 
 ```bash
-backup-cli-tool --help
+savr --help
 ```
 
 The help output documents each subcommand, its flags, and expected arguments. It often provides short usage examples that you can adapt for your own scripts. When upgrading versions, revisit the help text to discover new options or behavioral changes that might benefit your setup.
@@ -227,8 +212,8 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE) fil
 
 ## Support
 
-For issues, questions, or feature requests, please open an issue on the [GitHub repository](https://github.com/11Warrior/backup-cli-tool/issues). When reporting problems, include your operating system, Node.js version, and a description of the steps to reproduce the issue. Attaching relevant logs or configuration snippets can significantly speed up diagnosis and resolution. Feature requests are also welcome and help guide the project roadmap based on real user needs.
+For issues, questions, or feature requests, please open an issue on the [GitHub repository]([https://github.com/11Warrior/savr/issues]). When reporting problems, include your operating system, Node.js version, and a description of the steps to reproduce the issue. Attaching relevant logs or configuration snippets can significantly speed up diagnosis and resolution. Feature requests are also welcome and help guide the project roadmap based on real user needs.
 
 ---
 
-Thank you for using **backup-cli-tool** and helping make data protection simpler and safer! Your feedback and contributions directly improve reliability, usability, and feature coverage. By sharing your experiences and use cases, you help shape a tool that serves a wider community of users.
+Thank you for using **savr-cli** and helping make data protection simpler and safer! Your feedback and contributions directly improve reliability, usability, and feature coverage. By sharing your experiences and use cases, you help shape a tool that serves a wider community of users.
