@@ -1,10 +1,12 @@
 {
   "name": "savr",
+  "author": "Aayush Thapa(11Warrior)",
+  "license": "MIT",
   "version": "1.0.0",
   "description": "A robust command-line utility for automating and managing file and directory backups. Designed for developers, sysadmins, and power users, `savr` streamlines backup operations with a flexible configuration system and support for various storage destinations. The tool focuses on reliability, repeatability, and transparency, helping you understand exactly what gets backed up and when. It aims to reduce human error in backup routines by encoding your backup strategy in code and configuration rather than fragile manual processes.",
   "main": "index.js",
   "bin": {
-    "savr" : "./savr/dist/cli/cli.run.js"
+    "savr": "./savr/dist/cli/cli.run.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,19 +16,27 @@
     "type": "git",
     "url": "git+https://github.com/11Warrior/savr.git"
   },
-  "keywords": [],
-  "author": "Aayush Thapa(11Warrior)",
-  "license": "ISC",
+  "keywords": [
+    "backup",
+    "restore",
+    "mongodb",
+    "postgresql",
+    "cli",
+    "database"
+  ],
   "bugs": {
     "url": "https://github.com/11Warrior/savr/issues"
   },
+  "files": [
+    "dist"
+  ],
   "homepage": "https://github.com/11Warrior/savr#readme",
   "devDependencies": {
     "@types/node": "^25.2.3",
-    "dotenv": "^17.2.4"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "commander": "^14.0.3",
-    "typescript": "^5.9.3"
+    "dotenv": "^17.2.4"
   }
 }

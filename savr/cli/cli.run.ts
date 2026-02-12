@@ -10,6 +10,12 @@ config({
     path: path.resolve(process.cwd(), '.env')
 })
 
+if (!process.env.DB_URL) {
+    console.error("DB_URL not found.");
+    console.error("Make sure you are running savr from a directory containing a .env file.");
+    process.exit(1);
+}
+
 const program = new Command();
 
 program
