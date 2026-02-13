@@ -1,5 +1,5 @@
 # Savr
-https://roadmap.sh/projects/database-backup-utility
+
 A robust command-line utility for automating and managing file and directory backups. Designed for developers, sysadmins, and power users, `savr` streamlines backup operations with a flexible configuration system and support for various storage destinations. The tool focuses on reliability, repeatability, and transparency, helping you understand exactly what gets backed up and when. It aims to reduce human error in backup routines by encoding your backup strategy in code and configuration rather than fragile manual processes.
 
 ---
