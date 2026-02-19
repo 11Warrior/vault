@@ -4,8 +4,33 @@ needed tools :
     mongodb-tools(mongodump, mongorestore)
     mongosh
 
+    User runs:
+
+        sudo savr backup postgres -t 6h
+
+
+    Flow:
+
+        1. Immediate backup runs
+        2. SystemdScheduler installs:
+            savr-postgres.service
+            savr-postgres.timer
+        3. systemd handles execution
+
+    After 6 hours:
+
+        systemd
+        ↓
+        ExecStart=/absolute/path/to/savr backup postgres
+        ↓
+        CLI runs normally
+        ↓
+        BackupManager runs
+
+
+        No background Node process.
+        Pure OS-level scheduling.    
+
 -later need to containerize this inside a single container which can support all of the used tools
-
-
 
 -release as a package

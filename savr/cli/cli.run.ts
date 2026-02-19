@@ -26,8 +26,11 @@ program
         }
         return dbtype;
     })
+    .option('-t --time <interval>', 'Give interval for auto-backup feature like (-t 6h)')
     .description('Backups your database.')
-    .action((dbtype) => backup(dbtype));
+    .action((dbtype, options) => {
+        backup(dbtype, options.interval);
+    });
 
 
 program
