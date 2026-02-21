@@ -1,12 +1,11 @@
-import { store } from "./globalstore";
+import os from 'os'
 
-export function ValidInterval(interval: string): (string | null) {
+function getTimeAndUnit(interval: string) {
     if (interval === " ") return null;
 
     const regex = /^(\d+)([hmd])$/i;
 
     const match = interval.match(regex);
-    // console.log(match)
 
     if (!match) {
         console.log("Unsupported interval type...");
@@ -15,17 +14,20 @@ export function ValidInterval(interval: string): (string | null) {
 
     const time = parseInt(match?.[1] as string, 10);
     let unit = match[2] as string;
-    // console.log("In ValidInterval meth : time " + time + " unit" + unit);
 
     if (time <= 0) {
         throw new Error("Please enter the positive time like 6d, 10m..")
     }
 
-    store.interval = {
-        time,
-        unit
-    };
+    return { time, unit };
+}
 
+export function ValidInterval(interval: string): (string | null) {
+    const data = getTimeAndUnit(interval);
+
+    if (!data) return null;
+
+    const { unit, time } = data;
 
     switch (unit) {
         case "d":
@@ -37,5 +39,33 @@ export function ValidInterval(interval: string): (string | null) {
         default:
             return null;
     }
+}
+
+export function getPlatform() {
+    return os.platform();
+}
+
+export function getScheduleForWindows(interval: string) {
+    //data ccannot be null here -> validinterval -> scheduler -> getScheduleforwindows -> using any is safe 
+
+    const { unit, time } = getTimeAndUnit(interval) as any;
+
+    switch (unit) {
+        case "d":
+            return { 'type': SCHEDULE['d'], 'value': time }
+        case "h":
+            return { 'type': SCHEDULE['h'], 'value': time }
+        case "m":
+            return { 'type': SCHEDULE['m'], 'value': time }
+        default:
+            return null;
+    }
+
+}
+
+enum SCHEDULE {
+    'h' = 'HOURLY',
+    'd' = 'DAILY',
+    'm' = 'MINUTE'
 }
 

@@ -1,13 +1,13 @@
 import 'dotenv/config';
-import os from 'os';
 import { BackupManager } from "../core/BackupManager";
 import { LocalStorage } from "../storage/LocalStorage";
 import { AdapterFactory } from '../factory/AdapterFactory';
 import { getScheduler } from '../factory/SchedulerFactory';
 import { SchedulerManager } from '../core/SchedulerManager';
 import { Scheduler } from '../scheduler/Scheduler';
+import { getPlatform } from '../utils/utils';
 
-const platform = os.platform();
+const platform = getPlatform();
 
 export const backup = async (dbtype: string, interval: string = " ") => {
 
