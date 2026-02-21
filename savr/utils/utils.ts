@@ -21,11 +21,6 @@ export function ValidInterval(interval: string): (string | null) {
         throw new Error("Please enter the positive time like 6d, 10m..")
     }
 
-
-    // if (unit === 'm') {
-    //     unit = "min";
-    // }
-
     store.interval = {
         time,
         unit

@@ -3,7 +3,7 @@ import { ValidInterval } from "../utils/utils";
 
 export class SchedulerManager {
     constructor(private scheduler: Scheduler, private interval: string) { }
-
+    
     async run() {
         const scheduler = this.scheduler;
         const interval = this.interval;

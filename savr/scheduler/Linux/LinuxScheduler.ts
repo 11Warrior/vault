@@ -1,7 +1,6 @@
 import fs from 'fs'
 import { Scheduler } from "../Scheduler";
 import { execSync } from 'child_process';
-import { store } from '../../utils/globalstore';
 
 export class LinuxScheduler implements Scheduler {
     constructor(private dbtype: string) { }
@@ -45,7 +44,7 @@ export class LinuxScheduler implements Scheduler {
             OnBootSec=3min
             OnUnitInactiveSec=${interval}
             Persistent=true
-            Unit=savr-postgres.service
+            Unit=savr-${dbtype}.service
 
             [Install]
             WantedBy=timers.target
@@ -61,6 +60,7 @@ export class LinuxScheduler implements Scheduler {
         execSync(`systemctl start ${timerFile} `);
 
         execSync(`systemctl start ${serviceFile}`);
+        
         console.log(`Autobackup enabled for ${dbtype}`);
     }
 
