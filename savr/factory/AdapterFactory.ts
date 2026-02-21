@@ -1,4 +1,4 @@
-import { MongoDBAdapter } from "../adapters/MongoDBAdapter/MongoDBAdapeter";
+import { MongoDBAdapter } from "../adapters/MongoDBAdapter/MongoDBAdapter";
 import { PostgresAdapter } from "../adapters/PostgresAdapter/PostgresAdapter";
 
 export class AdapterFactory {

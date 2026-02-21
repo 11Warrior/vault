@@ -4,40 +4,28 @@ import { BackupManager } from "../core/BackupManager";
 import { LocalStorage } from "../storage/LocalStorage";
 import { AdapterFactory } from '../factory/AdapterFactory';
 import { getScheduler } from '../factory/SchedulerFactory';
-import { ValidInterval } from '../utils/utils';
+import { SchedulerManager } from '../core/SchedulerManager';
+import { Scheduler } from '../scheduler/Scheduler';
 
 const platform = os.platform();
 
 export const backup = async (dbtype: string, interval: string = " ") => {
 
-    const storage = new LocalStorage(dbtype);
+    const scheduler = getScheduler(platform, dbtype) as Scheduler;
     const adapter = AdapterFactory.getAdapter(dbtype);
+
+    const storage = new LocalStorage(dbtype);
     const backupManager = new BackupManager(adapter, storage);
-    const scheduler = getScheduler(platform, dbtype);
 
-    if (!scheduler) return;
+    const schedulerManager = new SchedulerManager(scheduler, interval);
 
-    if (interval === "0") {
-        await scheduler.stop();
-        process.exit(0)
+    if (interval !== " ") {
+        await schedulerManager.run();
     }
-    
-    if (interval && interval.trim().length > 0) {
-        const validInterval = ValidInterval(interval);
 
-        if (validInterval) {
-            //auto backup flow goes here
-            await scheduler.start(validInterval);
-        }
-        process.exit(0);
-
-    }
     const fileName = `backup-${Date.now()}.${dbtype === 'postgres' ? 'sql' : dbtype === 'mongodb' ? 'mongodb' : ' '}`;
 
     console.log('Preparing backup...');
-    // console.log(interval);
-
-    // console.log(validInterval);
 
     await backupManager.run(fileName);
 

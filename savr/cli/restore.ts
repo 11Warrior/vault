@@ -1,4 +1,4 @@
-import { MongoDBAdapter } from "../adapters/MongoDBAdapter/MongoDBAdapeter";
+import { MongoDBAdapter } from "../adapters/MongoDBAdapter/MongoDBAdapter";
 import { PostgresAdapter } from "../adapters/PostgresAdapter/PostgresAdapter";
 import { RestoreManager } from "../core/RestoreManager";
 import { LocalStorage } from "../storage/LocalStorage";
