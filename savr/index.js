@@ -1,0 +1,1 @@
+console.log("Index.js" + process.argv[1]);
