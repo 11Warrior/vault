@@ -51,6 +51,5 @@ export class WindowsScheduler implements Scheduler {
         const serviceFile = `savr-${dbtype}`;
 
         execSync(`schtasks /Query /TN "${serviceFile}"`);
-
     }
 }
