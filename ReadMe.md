@@ -26,6 +26,23 @@ A robust command-line utility for automating and managing file and directory bac
 
 - **Automation Friendly**: Integrates with cron, task schedulers, and CI pipelines. Since it runs as a standard CLI command, you can schedule backups using cron on Unix systems or Task Scheduler on Windows. CI pipelines can run backups before destructive operations like database migrations or deployments. This automation support encourages regular, repeatable backups instead of sporadic manual runs.
 
+## Features
+
+- **Platform-Independent Auto Backup**: Enable persistent automated database backups using a simple interval flag. By running `sudo savr backup <dbtype> -t <interval>`, you can configure recurring backups that survive system reboots and run in the background. The tool automatically detects the operating system and configures the appropriate native scheduler — systemd timers on Linux and Task Scheduler on Windows. This avoids fragile in-memory timers and ensures production-grade reliability across platforms.
+
+- **Interval-Based Scheduling**: Supports intuitive time formats such as `2m`, `5h`, and `6d` to define backup frequency. The interval parser validates inputs using a strict `number + unit` format (`m` for minutes, `h` for hours, `d` for days). Invalid formats are rejected safely to prevent accidental misconfiguration.
+
+- **Enable and Disable Automation from CLI**: Auto-backups can be enabled or disabled directly through CLI commands without manually interacting with cron, systemd, or Task Scheduler. When enabled, `savr` registers a persistent background job. When disabled, it cleanly removes the associated scheduler configuration while preserving manual backup functionality.
+
+- **Native OS Scheduler Integration**: Instead of implementing custom scheduling loops, `savr` leverages operating system-native tools. On Linux, it creates and manages systemd service and timer units. On Windows, it generates and registers Task Scheduler jobs. This design ensures reliability, proper logging, privilege handling, and system-level persistence.
+
+- **Database-Specific Backup Support**: Directly supports PostgreSQL and MongoDB backups through `pg_dump` and `mongodump`. The tool determines the correct backup mechanism based on the database type argument, ensuring clarity and eliminating ambiguity in backup execution.
+
+- **Persistent Across Reboots**: Scheduled backups remain active even after system restarts. Because `savr` uses native schedulers, backup jobs automatically resume without requiring additional flags or manual reconfiguration.
+
+- **Safe Validation and Error Handling**: All intervals, scheduler configurations, and command inputs are validated before activation. If configuration fails at any step, the tool exits safely with clear messaging, preventing partial or inconsistent scheduler states.
+
+- **Manual and Automated Modes**: Users can perform one-time manual backups or configure recurring automated backups using the same CLI interface. This flexibility supports both development workflows and fully automated production environments.
 ---
 
 ## Installation
