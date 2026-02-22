@@ -7,7 +7,7 @@ export class LinuxScheduler implements Scheduler {
 
     async start(interval: string): Promise<void> {
         const dbtype = this.dbtype;
-        const nodePath = execSync("which node").toString().trim();
+        const nodePath = process.execPath;
 
         const workDir = process.cwd();
         const entryPath = process.argv[1];

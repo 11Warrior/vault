@@ -4,6 +4,9 @@ package-lock.json
 
 /backup
 
+/test.js
+
+
 .env
 
 /tsconfig.tsbuildinfo

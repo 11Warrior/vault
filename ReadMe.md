@@ -28,7 +28,7 @@ A robust command-line utility for automating and managing file and directory bac
 
 ## Features
 
-- **Platform-Independent Auto Backup**: Enable persistent automated database backups using a simple interval flag. By running `sudo savr backup <dbtype> -t <interval>`, you can configure recurring backups that survive system reboots and run in the background. The tool automatically detects the operating system and configures the appropriate native scheduler — systemd timers on Linux and Task Scheduler on Windows. This avoids fragile in-memory timers and ensures production-grade reliability across platforms.
+- **Platform-Independent Auto Backup**: Enable persistent automated database backups using a simple interval flag. By running `sudo savr backup <dbtype> -t <interval>` for using autobackup you need to install savr-cli in root level using `sudo npm install savr-cli`, you can configure recurring backups that survive system reboots and run in the background. The tool automatically detects the operating system and configures the appropriate native scheduler — systemd timers on Linux and Task Scheduler on Windows. This avoids fragile in-memory timers and ensures production-grade reliability across platforms.
 
 - **Interval-Based Scheduling**: Supports intuitive time formats such as `2m`, `5h`, and `6d` to define backup frequency. The interval parser validates inputs using a strict `number + unit` format (`m` for minutes, `h` for hours, `d` for days). Invalid formats are rejected safely to prevent accidental misconfiguration.
 
