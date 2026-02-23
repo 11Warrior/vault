@@ -137,47 +137,6 @@ The help output documents each subcommand, its flags, and expected arguments. It
 
 ---
 
-## Configuration
-
-The tool uses a JSON configuration file to specify what and how to back up. Centralizing settings in a file makes backups reproducible and easier to review or audit. You can maintain different configuration files for various environments, such as development, staging, and production. This approach allows you to run the same command with different configurations, avoiding hard‑coded paths in scripts.
-
-Below is an example configuration:
-
-```json
-{
-  "source": [
-    "/home/user/Documents",
-    "/home/user/Pictures"
-  ],
-  "destination": "/mnt/backup-drive",
-  "exclude": [
-    "**/*.tmp",
-    "**/node_modules/**"
-  ],
-  "retention": {
-    "maxBackups": 7
-  },
-  "schedule": "0 2 * * *", // Optional: cron syntax
-  "compression": true
-}
-```
-
-### Configuration Fields
-
-- **source**: Array of files/directories to back up. Each entry represents a path that the tool will scan recursively, unless otherwise configured. You can include both absolute and relative paths, though absolute paths are generally safer in scheduled jobs. Multiple sources allow you to protect different areas of your filesystem in a single backup run.
-
-- **destination**: Path or URL to store backups. This can be a local directory, an external drive mount point, or a network share. The tool writes backup archives and optional metadata files into this location, so ensure sufficient disk space. Storing backups on a different physical device than the source reduces risk from hardware failures.
-
-- **exclude**: Patterns to exclude from backup. These patterns typically use glob syntax, letting you skip temporary files, build artifacts, or other nonessential data. Excluding large or rapidly changing folders can significantly reduce backup size and speed up runs. Thoughtful exclusion rules help focus your backups on truly valuable content.
-
-- **retention**: Policy to keep/remove old backups. In the example, `maxBackups` limits the number of stored archives, deleting the oldest when the threshold is exceeded. Retention prevents uncontrolled growth of backup storage and keeps only the most relevant restore points. You can adjust this setting based on storage capacity and recovery requirements.
-
-- **schedule**: (Optional) Cron-style string for scheduled runs. This value expresses when backups should run, such as nightly or hourly, using the familiar cron format. Some environments may use external schedulers that ignore this field, while others might read it to configure jobs. Including it in configuration documents your intended schedule alongside backup logic.
-
-- **compression**: Enable or disable archive compression. When enabled, the tool compresses backup data to reduce disk usage at the cost of extra CPU time. Compression is beneficial for large text or highly redundant data but may offer limited gains on already compressed formats. You can toggle this flag to balance performance and storage efficiency.
-
----
-
 ## Architecture Overview
 
 The following diagram illustrates the main workflow of the backup process. It shows how user input, configuration, validation, execution, and logging connect during a typical run. Understanding this flow helps when debugging unexpected behavior or extending the tool. Each step represents a logical phase that you can instrument or adjust if you modify the codebase.
